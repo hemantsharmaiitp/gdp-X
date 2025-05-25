@@ -6,7 +6,7 @@
     <title>GDP Prediction - India</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        body {
+         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f2f2f2;
             margin: 0;
@@ -43,14 +43,15 @@
             max-width: 1000px;
             margin: auto;
         }
-        .form-section, .gdp-info {
+        .form-section, .gdp-info, .news-section {
             background-color: white;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 40px;
         }
-        .form-section h2 {
+        .form-section h2,
+        .news-section h2 {
             margin-bottom: 20px;
             color: #333;
         }
@@ -104,6 +105,16 @@
             color: white;
             text-decoration: underline;
             margin-right: 10px;
+        }
+        .news-item {
+            margin-bottom: 20px;
+        }
+        .news-item h4 {
+            margin: 0;
+            color: #004080;
+        }
+        .news-item p {
+            color: #333;
         }
     </style>
 </head>
@@ -179,6 +190,33 @@
                 <li><strong>Infrastructure Investment:</strong> Continued investments in infrastructure, including transportation, energy, and urbanization, will boost economic productivity and output.</li>
                 <li><strong>Government Reforms:</strong> Reforms in sectors like taxation (GST), labor laws, and foreign investment policies are expected to improve the ease of doing business in India.</li>
             </ul>
+            <section class="news-section">
+            <h2>Latest Economic News 📰</h2>
+
+            <div class="news-item">
+                <h4>India's Q1 GDP Grows at 7.8%</h4>
+                <p>The Indian economy grew at a faster-than-expected pace in the first quarter, driven by strong domestic demand and increased infrastructure spending.</p>
+            </div>
+
+            <div class="news-item">
+                <h4>IMF Revises India's 2025 Growth Forecast to 6.9%</h4>
+                <p>The International Monetary Fund has revised India’s GDP growth forecast upwards, citing strong macroeconomic fundamentals and a resilient services sector.</p>
+            </div>
+
+            <div class="news-item">
+                <h4>RBI Maintains Repo Rate Amid Inflation Concerns</h4>
+                <p>The Reserve Bank of India decided to keep the repo rate unchanged at 6.5% to manage inflation while supporting economic growth.</p>
+            </div>
+
+            <div class="news-item">
+                <h4>Digital Payments Surge 55% Year-over-Year</h4>
+                <p>Driven by UPI and mobile wallets, digital transactions in India hit record levels, highlighting the ongoing shift to a cashless economy.</p>
+            </div>
+
+            <div class="news-item">
+                <h4>Exports Dip Slightly Due to Global Slowdown</h4>
+                <p>India’s exports saw a marginal decline amid weak global demand, although key sectors like electronics and pharmaceuticals remained robust.</p>
+            </div>
         </section>
     </main>
     <footer>
