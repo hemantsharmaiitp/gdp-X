@@ -1,17 +1,19 @@
-from flask import Flask, render_template, request, url_for, send_from_directory 
+from flask import Flask, render_template, request, url_for, send_from_directory
 from flask_mail import Mail, Message
 import pickle
 import os
 import numpy as np
 import requests
-from visualize import generate_gdp_plot
+from visualize import generate_gdp_plot  # Make sure this file exists
 
+# Load environment variables if running in production with secrets
 if os.path.exists("/etc/secrets/.env"):
     from dotenv import load_dotenv
     load_dotenv("/etc/secrets/.env")
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
+# Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -21,18 +23,14 @@ app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
 
 mail = Mail(app)
 
+# Load model (without scaler)
 model_path = os.path.join(os.path.dirname(__file__), 'model', 'gdp_model.pkl')
-scaler_path = os.path.join(os.path.dirname(__file__), 'model', 'scaler.pkl')
-
 with open(model_path, 'rb') as f:
     model = pickle.load(f)
 
-with open(scaler_path, 'rb') as f:
-    scaler = pickle.load(f)
-
 @app.route('/')
 def home():
-    news_api_key = os.getenv('NEWS_API_KEY')  # Put this key in your .env file
+    news_api_key = os.getenv('NEWS_API_KEY')
     articles = []
     if news_api_key:
         try:
@@ -78,17 +76,19 @@ def predict():
     try:
         year = request.form.get('year')
         if not year or not year.isdigit():
-            return render_template('result.html', prediction_text="Invalid input.")
+            return render_template('result.html', prediction_text="Invalid input. Please enter a valid year.")
 
         year = int(year)
-        scaled_year = scaler.transform([[year]])
-        prediction = model.predict(scaled_year)[0]
 
+        # Predict without scaling
+        prediction = model.predict([[year]])[0]
+
+        # Generate plot
         plot_path = generate_gdp_plot(year, prediction)
 
         return render_template(
             'result.html',
-            prediction_text=f"GDP for {year}: {prediction:,.2f}",
+            prediction_text=f"Predicted GDP for {year}: {prediction:,.2f}",
             plot_path=url_for('static', filename='images/plot.png')
         )
     except Exception as e:
