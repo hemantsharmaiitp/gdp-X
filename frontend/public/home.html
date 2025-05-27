@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GDP Prediction - India</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -109,7 +110,7 @@
 </head>
 <body>
     <header>
-        <h1>GDP Predictor - India</h1>
+        <h1>GDP Prediction Model - India</h1>
         <p>Explore India's Economic Growth Through Smart Predictions</p>
     </header>
     <nav>
@@ -125,69 +126,49 @@
             <h2>Predict the GDP of a Future Year</h2>
             <form action="/predict" method="post">
                 <label for="year">Enter Year:</label>
-                <input type="number" id="year" name="year" placeholder="e.g., 2030" required min="2024" max="2100">
-                <button type="submit">Predict</button>
+                <input type="number" id="year" name="year" placeholder="e.g., 2047" required min="2024" max="2100">
+                <button type="submit">PREDICT</button>
             </form>
         </section>
 
         <section class="gdp-info">
-            <h3>What is GDP?</h3>
-            <p>Gross Domestic Product (GDP) is the total monetary value of all finished goods and services produced within a country's borders in a specific time period. It is a comprehensive measure of a nation's overall economic activity. GDP is widely used to compare the economic health of different countries and to track the growth or contraction of a national economy.</p>
+            <h3>About the Project</h3>
+            <p>The <strong>India GDP Prediction Dashboard</strong> is an interactive tool developed as part of our academic capstone project. It is designed to estimate future GDP based on user inputs like current GDP value, annual growth rate, and time horizon. The goal is to provide simple, accessible forecasting that helps visualize India’s economic trajectory.</p>
 
-            <h3>India's GDP: A Journey of Growth</h3>
-            <p>India, one of the fastest-growing economies in the world, has witnessed tremendous transformation over the decades. From an agriculture-dominated economy to a booming services and tech industry, India’s GDP reflects its resilience and innovation. As of 2025, India stands as the fifth-largest economy globally in nominal GDP terms.</p>
+            <h3>How It Works</h3>
+            <p>The tool uses a compound growth formula to calculate future GDP:</p>
+            <pre style="background-color: #f4f4f4; padding: 1rem; border-radius: 5px;">
+Future GDP = Current GDP × (1 + Growth Rate)<sup>Years</sup>
+            </pre>
+            <p>The backend is built using <strong>FastAPI</strong>, a modern Python framework that processes user input and returns predictions in real-time via a REST API.</p>
 
-            <h3>Key Drivers of India’s GDP</h3>
+            <h3>Team Roles and Contributions</h3>
             <ul>
-                <li><strong>Agriculture:</strong> Agriculture continues to be a major contributor to India's GDP, despite the country's rapid industrialization. The sector, which includes farming, fishing, and forestry, employs a large percentage of the population, particularly in rural areas.</li>
-                <li><strong>Manufacturing:</strong> The manufacturing sector has become one of the largest contributors to India’s GDP, driven by industries such as automobiles, textiles, steel, and chemicals. The 'Make in India' initiative has been instrumental in boosting this sector.</li>
-                <li><strong>Services Sector:</strong> The services sector is the largest contributor to India’s GDP. This sector includes IT services, telecommunications, banking, finance, healthcare, and tourism. India is home to one of the world’s largest IT outsourcing industries.</li>
-                <li><strong>Digital India:</strong> India’s Digital Revolution has brought technology into the hands of millions, with initiatives such as the Digital India campaign promoting digital literacy, mobile internet, and e-commerce, thereby expanding the economy.</li>
+                <li><strong>Model Developer:</strong> Created the core GDP forecasting algorithm using Python.</li>
+                <li><strong>Backend Developer:</strong> Developed the FastAPI backend to handle user input and serve predictions.</li>
+                <li><strong>Frontend Developer:</strong> Designed the user interface to interact with the prediction API.</li>
+                <li><strong>Data Collector:</strong> Gathered and validated historical GDP data for analysis and testing.</li>
+                <li><strong>Project Integrator:</strong> Coordinated the integration of all modules and ensured end-to-end functionality.</li>
             </ul>
 
-            <h3>Historical Trends in India’s GDP Growth</h3>
-            <p>India’s economic growth has been variable, influenced by factors like policy changes, global economic conditions, and domestic challenges. From the early post-independence years, when the economy was primarily agricultural, India transitioned into an industrializing and eventually a service-oriented economy. The economic liberalization of 1991 marked a turning point, ushering in faster growth rates.</p>
-            <p>In the last decade, India has seen significant economic reforms, which have helped sustain growth, even as global growth slowed. Despite challenges such as inflation, global financial crises, and the COVID-19 pandemic, India has shown resilience and continues to grow at a rate higher than many other economies.</p>
-
-            <h3>India’s GDP by Sector</h3>
-            <p>India’s GDP is divided into three main sectors:</p>
+            <h3>Why This Project Matters</h3>
+            <p>Our tool aims to help:</p>
             <ul>
-                <li><strong>Agriculture:</strong> Contributes around 18% to India’s GDP, although its share in employment is much higher, with over 50% of the workforce depending on agriculture.</li>
-                <li><strong>Industry:</strong> The industrial sector, which includes manufacturing and construction, contributes around 29% to GDP. The sector has been expanding with the growth of infrastructure and the rise of the manufacturing sector under the 'Make in India' initiative.</li>
-                <li><strong>Services:</strong> The services sector is the dominant sector, contributing over 53% to India’s GDP. It is driven by IT services, telecommunications, finance, insurance, healthcare, and business services, among others.</li>
+                <li><strong>Policy makers:</strong> Simulate potential economic outcomes for strategic planning.</li>
+                <li><strong>Researchers & Students:</strong> Understand how growth rates affect long-term economic size.</li>
+                <li><strong>Entrepreneurs:</strong> Use forecasts for investment and market strategy insights.</li>
             </ul>
 
-            <h3>Regional Contributions to GDP</h3>
-            <p>India is a vast and diverse country, and different regions contribute in unique ways to its economic output. For example, the southern states of India, including Karnataka, Tamil Nadu, and Andhra Pradesh, are known for their tech hubs in cities like Bengaluru and Hyderabad, which significantly contribute to the services sector of GDP. In contrast, states like Maharashtra and Gujarat are industrial powerhouses, contributing heavily through manufacturing and trade.</p>
-            <p>Regional disparities exist, with some states performing better economically, owing to factors such as industrial development, infrastructure, and human capital development. The central government has introduced various initiatives to promote balanced regional development.</p>
-
-            <h3>Challenges Facing India’s GDP Growth</h3>
-            <p>While India’s GDP growth remains strong, there are several challenges that continue to affect the economy’s potential:</p>
-            <ul>
-                <li><strong>Poverty:</strong> Despite the overall economic growth, a significant portion of India’s population still lives in poverty, primarily in rural areas.</li>
-                <li><strong>Unemployment:</strong> High levels of unemployment, particularly among the youth, remain a significant issue. There is also a growing concern regarding underemployment.</li>
-                <li><strong>Income Inequality:</strong> Although India’s economy has grown, income inequality has worsened, with a rising gap between the rich and poor.</li>
-                <li><strong>Infrastructure Deficiencies:</strong> Insufficient infrastructure, particularly in rural areas, can limit productivity and hinder overall economic growth.</li>
-            </ul>
-
-            <h3>Future Outlook for India's GDP</h3>
-            <p>India is projected to continue growing rapidly over the next several decades, driven by demographic advantages and increased global integration. The country’s youth population, which is expected to remain one of the largest in the world, will contribute significantly to the workforce. Additionally, India’s increasing global connectivity through trade agreements, digital advancements, and investment in infrastructure will further bolster growth.</p>
-            <p>By 2030, India is expected to become the third-largest economy in the world in nominal terms, behind only the United States and China. This growth will be supported by:</p>
-            <ul>
-                <li><strong>Urbanization:</strong> As India’s urban population increases, the shift from rural to urban living will fuel demand for goods and services, further stimulating growth.</li>
-                <li><strong>Education and Skill Development:</strong> India is investing heavily in education, particularly in science, technology, engineering, and mathematics (STEM) fields, which will ensure a skilled workforce for the future.</li>
-                <li><strong>Infrastructure Investment:</strong> Continued investments in infrastructure, including transportation, energy, and urbanization, will boost economic productivity and output.</li>
-                <li><strong>Government Reforms:</strong> Reforms in sectors like taxation (GST), labor laws, and foreign investment policies are expected to improve the ease of doing business in India.</li>
-            </ul>
+            <h3>Future Scope</h3>
+            <p>We plan to enhance the model by incorporating real-time data feeds, sector-wise growth projections, and more sophisticated prediction techniques such as machine learning. The current version is just the beginning of a broader economic analysis platform.</p>
         </section>
     </main>
     <footer>
-        <p>&copy; 2025 GDP Prediction Website. All Rights Reserved.</p>
+        <p>&copy; 2025 GDP Prediction Model | All Rights Reserved</p>
         <div class="privacy-links">
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
         </div>
-        <div class="social-media"><!-- Footer -->
-    
+        <div class="social-media">
             <a href="https://www.facebook.com" target="_blank">
                 <img src="{{ url_for('static', filename='images/facebook-icon.png') }}" alt="Facebook">
             </a>
