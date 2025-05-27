@@ -1,59 +1,49 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify
 import numpy as np
 import pickle
 import os
-import matplotlib.pyplot as plt
 
-# Initialize Flask app
-app = Flask(__name__, static_folder='static', template_folder='templates')
+app = Flask(__name__)
 
-# Load the scaler and model
+# Load trained GDP prediction model
+model_path = os.path.join('model', 'gdp_model.pkl')
 scaler_path = os.path.join('model', 'scaler.pkl')
-model_path = os.path.join('model', 'model.pkl')  # Make sure this exists
 
-# Load the scaler
-with open(scaler_path, 'rb') as f:
-    scaler = pickle.load(f)
-
-# Load the trained regression model
-with open(model_path, 'rb') as f:
-    model = pickle.load(f)
-
-@app.route('/')
-def home():
-    return render_template('home.html')
+try:
+    with open(model_path, 'rb') as f:
+        model = pickle.load(f)
+    with open(scaler_path, 'rb') as f:
+        scaler = pickle.load(f)
+    print("Model and scaler loaded successfully.")
+except FileNotFoundError as e:
+    print(f"Model or scaler file not found: {e}")
+    raise
+except Exception as e:
+    print(f"An error occurred while loading model/scaler: {e}")
+    raise
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get form input values
-        values = [float(request.form.get(f'f{i+1}')) for i in range(4)]
-        input_data = np.array(values).reshape(1, -1)
+        data = request.get_json()
+        year = data.get('year')
 
-        # Scale the input values
-        scaled_input = scaler.transform(input_data)
+        if year is None:
+            return jsonify({'error': 'Missing year in request'}), 400
 
-        # Make prediction
-        prediction = model.predict(scaled_input)[0]
+        # Convert year to numpy array and reshape
+        input_data = np.array([[year]])
 
-        # Plot the input features
-        features = ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
-        plt.figure(figsize=(6, 4))
-        plt.bar(features, values, color='skyblue')
-        plt.title('Input Feature Values')
-        plt.ylabel('Value')
-        plt.tight_layout()
+        # Scale the year input using the same scaler used during training
+        input_scaled = scaler.transform(input_data)
 
-        # Save plot image
-        plot_path = os.path.join('static', 'images', 'input_plot.png')
-        os.makedirs(os.path.dirname(plot_path), exist_ok=True)
-        plt.savefig(plot_path)
-        plt.close()
+        # Predict GDP
+        prediction = model.predict(input_scaled)[0]
 
-        return render_template('result.html', prediction=round(prediction, 2), plot_url=plot_path)
+        return jsonify({'year': year, 'predicted_gdp': prediction})
 
     except Exception as e:
-        return f"Error: {str(e)}"
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
