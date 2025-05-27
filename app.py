@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-# Load trained GDP prediction model
+# Load trained GDP prediction model and scaler
 model_path = os.path.join('model', 'gdp_model.pkl')
 scaler_path = os.path.join('model', 'scaler.pkl')
 
@@ -14,12 +14,12 @@ try:
         model = pickle.load(f)
     with open(scaler_path, 'rb') as f:
         scaler = pickle.load(f)
-    print("Model and scaler loaded successfully.")
+    print("✅ Model and scaler loaded successfully.")
 except FileNotFoundError as e:
-    print(f"Model or scaler file not found: {e}")
+    print(f"❌ Model or scaler file not found: {e}")
     raise
 except Exception as e:
-    print(f"An error occurred while loading model/scaler: {e}")
+    print(f"❌ Error loading model/scaler: {e}")
     raise
 
 @app.route('/predict', methods=['POST'])
@@ -31,16 +31,19 @@ def predict():
         if year is None:
             return jsonify({'error': 'Missing year in request'}), 400
 
-        # Convert year to numpy array and reshape
+        # Prepare input
         input_data = np.array([[year]])
-
-        # Scale the year input using the same scaler used during training
         input_scaled = scaler.transform(input_data)
 
-        # Predict GDP
+        print(f"📌 Input year: {year}, Scaled input: {input_scaled}")
+
+        # Predict
         prediction = model.predict(input_scaled)[0]
 
-        return jsonify({'year': year, 'predicted_gdp': prediction})
+        return jsonify({
+            'year': year,
+            'predicted_gdp': round(prediction, 2)
+        })
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
