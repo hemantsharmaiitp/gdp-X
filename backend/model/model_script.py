@@ -1,79 +1,62 @@
 import pandas as pd
-import numpy as np
-import os
-import pickle
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
+import pickle
+import os
 
-# === Configuration ===
-BASE_DIR = 'c:/Users/harin/OneDrive/Desktop/gdp-prediction-website/backend/model'
-DATA_PATH = os.path.join(BASE_DIR, 'india_gdp', 'gdp.csv')
-SCALER_PATH = os.path.join(BASE_DIR, 'scaler.pkl')
-MODEL_PATH = os.path.join(BASE_DIR, 'gdp_model.pkl')
-
-# Ensure model directory exists
-os.makedirs(BASE_DIR, exist_ok=True)
+# File path for the GDP CSV dataset
+file_path = 'c:/Users/harin/OneDrive/Desktop/gdp-prediction-website/backend/model/india_gdp/gdp.csv'
 
 try:
-    # === Load Dataset ===
-    print("Loading dataset...")
-    data = pd.read_csv(DATA_PATH, skiprows=4)
-    print("Dataset loaded successfully!")
+    # Load the dataset and skip metadata rows
+    data = pd.read_csv(file_path, skiprows=4)
+    print("✅ Dataset loaded successfully!")
 
-    # === Filter for GDP data only ===
+    # Filter data only for GDP (current US$) indicator
     gdp_data = data[data['Indicator Name'] == 'GDP (current US$)']
-    print(f"GDP Data filtered. Shape: {gdp_data.shape}")
+    print(f"✅ GDP data filtered. Shape: {gdp_data.shape}")
 
-    # === Clean and Reshape ===
+    # Remove irrelevant columns and reshape the data
     gdp_data = gdp_data.drop(columns=['Country Name', 'Country Code', 'Indicator Name', 'Indicator Code'], errors='ignore')
     gdp_data = gdp_data.melt(var_name='year', value_name='gdp')
     gdp_data['year'] = pd.to_numeric(gdp_data['year'], errors='coerce')
     gdp_data['gdp'] = pd.to_numeric(gdp_data['gdp'], errors='coerce')
     gdp_data = gdp_data.dropna()
-    print("Data cleaned and reshaped successfully!")
+    print("✅ Data cleaned and reshaped successfully!")
     print(gdp_data.head())
 
-    # === Feature Scaling ===
-    features = gdp_data[['year']]
-    target = gdp_data['gdp']
+    # Prepare features and target
+    X = gdp_data[['year']]
+    y = gdp_data['gdp']
+
+    # Apply feature scaling
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(features)
-    print("Feature scaling completed.")
+    X_scaled = scaler.fit_transform(X)
+    print("✅ Feature scaling completed.")
 
-    # === Save Scaler ===
-    with open(SCALER_PATH, 'wb') as f:
-        pickle.dump(scaler, f)
-    print(f"Scaler saved at: {SCALER_PATH}")
+    # Save the scaler for use in prediction
+    scaler_save_path = 'c:/Users/harin/OneDrive/Desktop/gdp-prediction-website/backend/model/scaler.pkl'
+    with open(scaler_save_path, 'wb') as scaler_file:
+        pickle.dump(scaler, scaler_file)
+    print(f"✅ Scaler saved at: {scaler_save_path}")
 
-    # === Train-Test Split ===
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, target, test_size=0.2, random_state=42)
-    print(f"Train-Test split done: {len(X_train)} train, {len(X_test)} test")
+    # Train the Linear Regression model
+    model = LinearRegression()
+    model.fit(X_scaled, y)
+    print("✅ Linear Regression model trained.")
 
-    # === Model Training ===
-    model = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)
-    model.fit(X_train, y_train)
-    print("Model training completed.")
+    # Evaluate the model
+    r2_score = model.score(X_scaled, y)
+    print(f"📊 Model R^2 score: {r2_score:.4f}")
 
-    # === Evaluate Model ===
-    train_score = model.score(X_train, y_train)
-    test_score = model.score(X_test, y_test)
-    print(f"Training R^2: {train_score:.2f}")
-    print(f"Testing R^2: {test_score:.2f}")
-
-    # === Cross Validation ===
-    cv_scores = cross_val_score(model, X_scaled, target, cv=5, scoring='r2')
-    print(f"Cross-validation scores: {cv_scores}")
-    print(f"Mean CV R^2: {cv_scores.mean():.2f}")
-
-    # === Save Model ===
-    with open(MODEL_PATH, 'wb') as f:
-        pickle.dump(model, f)
-    print(f"Model saved at: {MODEL_PATH}")
+    # Save the trained model
+    model_save_path = 'c:/Users/harin/OneDrive/Desktop/gdp-prediction-website/backend/model/gdp_model.pkl'
+    with open(model_save_path, 'wb') as model_file:
+        pickle.dump(model, model_file)
+    print(f"✅ Model saved at: {model_save_path}")
 
 except FileNotFoundError:
-    print(f"File not found: {DATA_PATH}")
-except KeyError as e:
-    print(f"Missing column: {e}")
+    print(f"❌ File not found! Check the path: {file_path}")
 except Exception as e:
-    print(f"An unexpected error occurred: {e}")
+    print(f"❌ An error occurred: {e}")
