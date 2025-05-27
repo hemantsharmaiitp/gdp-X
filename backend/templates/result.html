@@ -119,6 +119,11 @@
             display: inline-block;
         }
 
+        .social-media img {
+            width: 30px;
+            height: 30px;
+        }
+
         footer .privacy-links a {
             color: white;
             text-decoration: underline;
@@ -133,10 +138,6 @@
 
             .container {
                 padding: 20px;
-            }
-
-            footer .social-media {
-                text-align: center;
             }
 
             footer .social-media a {
@@ -197,13 +198,12 @@
     </div>
 
     <!-- Footer -->
-   <footer>
+    <footer>
         <p>&copy; 2025 GDP Prediction Website. All Rights Reserved.</p>
         <div class="privacy-links">
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
         </div>
-        <div class="social-media"><!-- Footer -->
-    
+        <div class="social-media">
             <a href="https://www.facebook.com" target="_blank">
                 <img src="{{ url_for('static', filename='images/facebook-icon.png') }}" alt="Facebook">
             </a>
